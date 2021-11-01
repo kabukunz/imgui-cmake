@@ -6,12 +6,16 @@ cmake_minimum_required(VERSION 3.6.0)
 include(CMakeOptions.cmake)
 include(CMakeImplFiles.cmake)
 
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 ##################################################################################################################
 # Setup (change imgui version according to your needs)
 ##################################################################################################################
+set(version 1.7.1)
+
 project(imgui
-        VERSION 1.71
+        VERSION ${version}
         LANGUAGES CXX
         DESCRIPTION "ImGui library."
 )
@@ -101,12 +105,19 @@ add_library(${PROJECT_NAME}
     ${SOURCES_CXX_IMPL_FILES}
     ${FONTS_FILES}
 )
-target_include_directories(${PROJECT_NAME} PUBLIC 
+
+list(APPEND IMGUI_INCLUDE_DIRS
     ${SOURCE_DIR}
     ${SOURCE_DIR}/examples
     ${SOURCE_DIR}/examples/libs/gl3w
     ${SOURCE_DIR}/examples/libs/glfw/include
-)
+    )
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    "$<BUILD_INTERFACE:${IMGUI_INCLUDE_DIRS}>"
+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
+    )
+
 if(IMGUI_IMPL_DX12 AND NOT IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC d3d12)
 endif()
@@ -115,20 +126,71 @@ endif()
 ##################################################################################################################
 # Target Install
 ##################################################################################################################
+
+# sources
 install(
     TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-)
+    EXPORT ${PROJECT_NAME}Targets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+
 install(
     FILES ${HEADERS_CXX_FILES} ${HEADERS_CXX_IMPL_FILES}
-    DESTINATION include
-)
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+
 install(
     FILES ${FONTS_FILES}
-    DESTINATION misc/fonts
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/misc/fonts"
+    )
+
+# library
+install(EXPORT ${PROJECT_NAME}Targets
+    FILE "${PROJECT_NAME}Targets.cmake"
+    NAMESPACE "${PROJECT_NAME}::"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+    )
+
+# package
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+    )
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+    )
+
+# version
+
+# set(version 1.7.1)
+set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${version})
+set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION 1)
+set_property(TARGET ${PROJECT_NAME} PROPERTY "INTERFACE_${PROJECT_NAME}_MAJOR_VERSION" 1)
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING "${PROJECT_NAME}_MAJOR_VERSION")
+
+# generate the version file for the config file
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  VERSION "${version}"
+  COMPATIBILITY AnyNewerVersion
 )
+
+# export in the build tree
+export(EXPORT "${PROJECT_NAME}Targets"
+       FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake"
+       NAMESPACE "${PROJECT_NAME}::"
+)
+
+# 
+# 
+# 
 
 # Install PDB files for VS builds to enable debugging:
 if (MSVC)
