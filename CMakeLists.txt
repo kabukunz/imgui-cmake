@@ -113,20 +113,19 @@ endif()
 ##################################################################################################################
 # Target Install
 ##################################################################################################################
-set (DISTRIBUTE_DIR ${CMAKE_BINARY_DIR}/dist/$<CONFIG>)
 install(
     TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION ${DISTRIBUTE_DIR}/bin
-    LIBRARY DESTINATION ${DISTRIBUTE_DIR}/lib
-    ARCHIVE DESTINATION ${DISTRIBUTE_DIR}/lib
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
 )
 install(
     FILES ${HEADERS_CXX_FILES} ${HEADERS_CXX_IMPL_FILES}
-    DESTINATION ${DISTRIBUTE_DIR}/include
+    DESTINATION include
 )
 install(
     FILES ${FONTS_FILES}
-    DESTINATION ${DISTRIBUTE_DIR}/misc/fonts
+    DESTINATION misc/fonts
 )
 
 # Install PDB files for VS builds to enable debugging:
@@ -134,7 +133,7 @@ if (MSVC)
   if (NOT IMGUI_STATIC_LIBRARY)
     install(
         FILES $<TARGET_PDB_FILE:${PROJECT_NAME}> 
-        DESTINATION ${DISTRIBUTE_DIR}/lib
+        DESTINATION lib
         CONFIGURATIONS Debug OR RelWithDebInfo
         COMPONENT libraries
         OPTIONAL
@@ -144,7 +143,7 @@ if (MSVC)
         FILES 
           $<$<CONFIG:Debug>:${CMAKE_BINARY_DIR}/bin/$<CONFIG>/${PROJECT_NAME}.pdb>
           $<$<CONFIG:RelWithDebInfo>:${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dir/$<CONFIG>/${PROJECT_NAME}.pdb>
-        DESTINATION ${DISTRIBUTE_DIR}/lib
+        DESTINATION lib
         CONFIGURATIONS Debug OR RelWithDebInfo
         COMPONENT libraries
         OPTIONAL
