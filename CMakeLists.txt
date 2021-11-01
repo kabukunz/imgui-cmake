@@ -104,6 +104,8 @@ add_library(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC 
     ${SOURCE_DIR}
     ${SOURCE_DIR}/examples
+    ${SOURCE_DIR}/examples/libs/gl3w
+    ${SOURCE_DIR}/examples/libs/glfw/include
 )
 if(IMGUI_IMPL_DX12 AND NOT IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC d3d12)
