@@ -56,12 +56,12 @@ function(Init_Impl_Files HEADERS_CXX_IMPL_FILES SOURCES_CXX_IMPL_FILES)
     message(STATUS "[INFO] Including GLFW3 OpenGL3 implementation files.")
     set(HEADERS_CXX_IMPL_FILES
       ${EXAMPLES_DIR}/imgui_impl_opengl3.h
-      ${EXAMPLES_DIR}/imgui_impl_win32.h
+      ${EXAMPLES_DIR}/imgui_impl_glfw.h
       PARENT_SCOPE
     )
     set(SOURCES_CXX_IMPL_FILES
       ${EXAMPLES_DIR}/imgui_impl_opengl3.cpp
-      ${EXAMPLES_DIR}/imgui_impl_win32.cpp
+      ${EXAMPLES_DIR}/imgui_impl_glfw.cpp
       PARENT_SCOPE
     )
   else()

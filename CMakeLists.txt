@@ -109,7 +109,6 @@ add_library(${PROJECT_NAME}
     ${FONTS_FILES}
 )
 
-# CHECK: should include glfw headers if uses the implementation 
 list(APPEND IMGUI_INCLUDE_DIRS
     ${SOURCE_DIR}
     ${SOURCE_DIR}/examples
@@ -122,9 +121,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
     )
 
-# CHECK: should link with glfw if uses the implementation 
 if(IMGUI_IMPL_DX12 AND NOT IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC d3d12)
+endif()
+
+if(IMGUI_IMPL_GLFW3_OPENGL3 AND IMGUI_STATIC_LIBRARY)
+    target_link_libraries(${PROJECT_NAME} PUBLIC "imgui/examples/libs/glfw/lib-vc2010-64/glfw3.lib")
 endif()
 
 
