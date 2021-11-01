@@ -1,6 +1,8 @@
 #
 # ImGui Library
 #
+
+# CHECK: too high?
 cmake_minimum_required(VERSION 3.6.0)
 
 include(CMakeOptions.cmake)
@@ -41,6 +43,7 @@ endif()
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
 set(EXAMPLES_DIR ${SOURCE_DIR}/examples)
+set(LIBS_DIR ${EXAMPLES_DIR}/libs)
 set(FONTS_DIR ${SOURCE_DIR}/misc/fonts)
 
 
@@ -106,6 +109,7 @@ add_library(${PROJECT_NAME}
     ${FONTS_FILES}
 )
 
+# CHECK: should include glfw headers if uses the implementation 
 list(APPEND IMGUI_INCLUDE_DIRS
     ${SOURCE_DIR}
     ${SOURCE_DIR}/examples
@@ -118,6 +122,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
     )
 
+# CHECK: should link with glfw if uses the implementation 
 if(IMGUI_IMPL_DX12 AND NOT IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC d3d12)
 endif()
