@@ -85,6 +85,8 @@ set(SOURCES_LIB_FILES
     ${LIBS_DIR}/gl3w/GL/gl3w.c
 )
 
+unset(HEADERS_LIB_FILES)
+unset(SOURCES_LIB_FILES)
 
 ##################################################################################################################
 # IDE Representation
