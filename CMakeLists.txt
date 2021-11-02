@@ -74,6 +74,17 @@ if (IMGUI_WITH_IMPL)
   Init_Impl_Files(HEADERS_CXX_IMPL_FILES SOURCES_CXX_IMPL_FILES)
 endif()
 
+set(HEADERS_LIB_FILES
+    ${LIBS_DIR}/gl3w/GL/gl3w.h
+    ${LIBS_DIR}/gl3w/GL/glcorearb.h
+    ${LIBS_DIR}/glfw/include/GLFW/glfw3.h
+    ${LIBS_DIR}/glfw/include/GLFW/glfw3native.h
+    )
+
+set(SOURCES_LIB_FILES
+    ${LIBS_DIR}/gl3w/GL/gl3w.c
+)
+
 
 ##################################################################################################################
 # IDE Representation
@@ -106,6 +117,8 @@ add_library(${PROJECT_NAME}
     ${SOURCES_CXX_FILES}
     ${HEADERS_CXX_IMPL_FILES}
     ${SOURCES_CXX_IMPL_FILES}
+    ${HEADERS_LIB_FILES}
+    ${SOURCES_LIB_FILES}
     ${FONTS_FILES}
 )
 
@@ -137,7 +150,7 @@ endif()
 # sources
 install(
     TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}Targets
+    EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -145,7 +158,7 @@ install(
     )
 
 install(
-    FILES ${HEADERS_CXX_FILES} ${HEADERS_CXX_IMPL_FILES}
+    FILES ${HEADERS_CXX_FILES} ${HEADERS_CXX_IMPL_FILES} ${HEADERS_LIB_FILES}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
