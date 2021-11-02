@@ -140,6 +140,7 @@ if(IMGUI_IMPL_DX12 AND NOT IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC d3d12)
 endif()
 
+unset(IMGUI_IMPL_GLFW3_OPENGL3)
 if(IMGUI_IMPL_GLFW3_OPENGL3 AND IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC "imgui/examples/libs/glfw/lib-vc2010-64/glfw3.lib")
 endif()
