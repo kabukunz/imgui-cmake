@@ -8,7 +8,8 @@
 
 cmake_minimum_required(VERSION 3.16.1)
 
-set(version 1.7.1)
+# NOTE: must match imgui version in imgui.h
+set(version 1.71)
 
 project(imgui
         VERSION ${version}
@@ -192,7 +193,6 @@ install(FILES
 
 # version
 
-# set(version 1.7.1)
 set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${version})
 set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION 1)
 set_property(TARGET ${PROJECT_NAME} PROPERTY "INTERFACE_${PROJECT_NAME}_MAJOR_VERSION" 1)
