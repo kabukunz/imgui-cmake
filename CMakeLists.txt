@@ -2,25 +2,25 @@
 # ImGui Library
 #
 
-# CHECK: too high?
-cmake_minimum_required(VERSION 3.6.0)
+##################################################################################################################
+# Setup (change imgui version according to your needs)
+##################################################################################################################
+
+cmake_minimum_required(VERSION 3.16.1)
+
+set(version 1.7.1)
+
+project(imgui
+        VERSION ${version}
+        LANGUAGES CXX C
+        DESCRIPTION "ImGui library."
+)
 
 include(CMakeOptions.cmake)
 include(CMakeImplFiles.cmake)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
-
-##################################################################################################################
-# Setup (change imgui version according to your needs)
-##################################################################################################################
-set(version 1.7.1)
-
-project(imgui
-        VERSION ${version}
-        LANGUAGES CXX
-        DESCRIPTION "ImGui library."
-)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
