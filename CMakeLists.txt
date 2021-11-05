@@ -1,15 +1,11 @@
-#
-# ImGui Library
-#
 
-##################################################################################################################
-# Setup (change imgui version according to your needs)
-##################################################################################################################
+#
+# setup
+#
 
 cmake_minimum_required(VERSION 3.16.1)
 
-# NOTE: must match imgui version in imgui.h
-set(version 1.71)
+set(version 1.76)
 
 project(imgui
         VERSION ${version}
@@ -47,10 +43,10 @@ set(EXAMPLES_DIR ${SOURCE_DIR}/examples)
 set(LIBS_DIR ${EXAMPLES_DIR}/libs)
 set(FONTS_DIR ${SOURCE_DIR}/misc/fonts)
 
+# 
+# sources
+# 
 
-##################################################################################################################
-# Project Files
-##################################################################################################################
 set(HEADERS_CXX_FILES 
     ${SOURCE_DIR}/imgui.h
     ${SOURCE_DIR}/imconfig.h
@@ -89,32 +85,10 @@ set(SOURCES_LIB_FILES
 unset(HEADERS_LIB_FILES)
 unset(SOURCES_LIB_FILES)
 
-##################################################################################################################
-# IDE Representation
-##################################################################################################################
-# Groups CMake pre-defined projects:
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+# 
+# target
+# 
 
-source_group("Header Files" FILES
-    ${HEADERS_CXX_FILES}
-)
-source_group("Header Files\\Impl" FILES
-    ${HEADERS_CXX_IMPL_FILES}
-)
-source_group("Source Files" FILES
-    ${SOURCES_CXX_FILES}
-)
-source_group("Source Files\\Impl" FILES
-    ${SOURCES_CXX_IMPL_FILES}
-)
-source_group("Resource Files" FILES
-    ${FONTS_FILES}
-)
-
-
-##################################################################################################################
-# Target
-##################################################################################################################
 add_library(${PROJECT_NAME} 
     ${HEADERS_CXX_FILES}
     ${SOURCES_CXX_FILES}
@@ -146,12 +120,11 @@ if(IMGUI_IMPL_GLFW3_OPENGL3 AND IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC "imgui/examples/libs/glfw/lib-vc2010-64/glfw3.lib")
 endif()
 
+# 
+# install
+# 
 
-##################################################################################################################
-# Target Install
-##################################################################################################################
-
-# sources
+# target
 install(
     TARGETS ${PROJECT_NAME}
     EXPORT "${PROJECT_NAME}Targets"
@@ -161,11 +134,13 @@ install(
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
+# headers
 install(
     FILES ${HEADERS_CXX_FILES} ${HEADERS_CXX_IMPL_FILES} ${HEADERS_LIB_FILES}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
+# misc
 install(
     FILES ${FONTS_FILES}
     DESTINATION "${CMAKE_INSTALL_PREFIX}/misc/fonts"
@@ -192,7 +167,6 @@ install(FILES
     )
 
 # version
-
 set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${version})
 set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION 1)
 set_property(TARGET ${PROJECT_NAME} PROPERTY "INTERFACE_${PROJECT_NAME}_MAJOR_VERSION" 1)
@@ -210,31 +184,3 @@ export(EXPORT "${PROJECT_NAME}Targets"
        FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake"
        NAMESPACE "${PROJECT_NAME}::"
 )
-
-# 
-# 
-# 
-
-# Install PDB files for VS builds to enable debugging:
-if (MSVC)
-  if (NOT IMGUI_STATIC_LIBRARY)
-    install(
-        FILES $<TARGET_PDB_FILE:${PROJECT_NAME}> 
-        DESTINATION lib
-        CONFIGURATIONS Debug OR RelWithDebInfo
-        COMPONENT libraries
-        OPTIONAL
-    )
-  else()
-    install(
-        FILES 
-          $<$<CONFIG:Debug>:${CMAKE_BINARY_DIR}/bin/$<CONFIG>/${PROJECT_NAME}.pdb>
-          $<$<CONFIG:RelWithDebInfo>:${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dir/$<CONFIG>/${PROJECT_NAME}.pdb>
-        DESTINATION lib
-        CONFIGURATIONS Debug OR RelWithDebInfo
-        COMPONENT libraries
-        OPTIONAL
-    )
-  endif()
-endif()
-
